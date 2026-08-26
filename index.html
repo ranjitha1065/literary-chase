@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Mission | Treasure Hunt</title>
+    <!-- Google Fonts for Space Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+    <!-- Space Background Layers -->
+    <div id="space-bg">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+        <div class="planet"></div>
+        <!-- Comets are dynamically added or CSS animated -->
+        <div class="comet"></div>
+        <div class="comet comet2"></div>
+    </div>
+    
+
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen" class="screen">
+        <div class="radar-container">
+            <div class="radar"></div>
+            <div class="satellite">🛰️</div>
+        </div>
+        <h2 class="loading-text">Initializing Mission...</h2>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <p id="loading-subtext" class="terminal-text">> Connecting to Satellite...</p>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="container hidden" id="main-container">
+
+        <!-- Top Section -->
+        <header>
+            <div class="title-container glow-animation">
+                <h1>🚀 SPACE TREASURE HUNT</h1>
+                <p>Decode the galaxy to unlock the next mission</p>
+                <div id="team-display" class="team-badge">Waiting for connection...</div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Setup Error State -->
+            <div id="error-card" class="card hidden glow-red">
+                <h2>⚠️ Access Denied</h2>
+                <p>No valid team identifier found. Please ensure you scanned the correct QR code.</p>
+            </div>
+
+            <!-- Puzzle Input State -->
+            <div id="mission-card" class="card glow-blue">
+                <form id="password-form" onsubmit="event.preventDefault(); handlePasswordSubmit();">
+                    <div class="terminal-header">> ENTER DECRYPTION CODE</div>
+                    <div class="input-group">
+                        <span class="prompt-arrow">></span>
+                        <input type="text" id="password-input" class="typing-animation" placeholder="_" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" required>
+                        <span class="blinking-cursor"></span>
+                    </div>
+                    
+                    <p id="feedback-message" class="feedback-msg hidden"></p>
+                    
+                    <button type="submit" class="btn-primary" id="unlock-btn">
+                        <span>Unlock Mission</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success State (Mission Unlocked) -->
+            <div id="success-card" class="card hidden glow-purple">
+                <h2 class="title-flash hidden" id="mission-unlocked-title">MISSION UNLOCKED</h2>
+                
+                <div class="spaceship-launch hidden" id="rocket-animation">🚀</div>
+                
+                <div id="reveal-sequence" class="hidden">
+                    <div class="radar-scan-small" id="mini-radar"></div>
+                    <div id="planet-icon" class="hidden">🪐</div>
+                </div>
+
+                <div class="location-box hidden" id="location-box">
+                    <p class="terminal-text small">> NEXT LOCATION</p>
+                    <h3 id="next-location">📍 Location Name</h3>
+                    <p id="location-hint" class="hint">Location hint goes here...</p>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

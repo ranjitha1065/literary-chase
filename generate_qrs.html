@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Mission QR Codes</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 40px; 
+            background: #f8fafc; 
+            color: #334155;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #0f172a; }
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        input { 
+            padding: 12px; 
+            width: 100%; 
+            max-width: 400px; 
+            margin-right: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-size: 16px;
+        }
+        button { 
+            padding: 12px 24px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2563eb; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 30px; 
+        }
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            text-align: center; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+            border-top: 5px solid #3b82f6;
+        }
+        .card h2 { margin-top: 0; color: #1e293b; }
+        .qr-wrapper {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background: white;
+        }
+        .url-text {
+            word-break: break-all;
+            font-size: 0.85rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        @media print {
+            .control-panel { display: none; }
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Mission QR Code Generator</h1>
+    
+    <div class="control-panel">
+        <p><strong>1. Enter your deployed Netlify URL below</strong> (e.g., <code>https://space-hunt-123.netlify.app</code>).<br>
+           If you leave it blank, it will generate placeholders for you to preview.</p>
+        <div>
+            <input type="text" id="baseUrl" placeholder="https://your-site.netlify.app">
+            <button onclick="generateQRs()">Generate QR Codes</button>
+            <button onclick="window.print()" style="background: #10b981; margin-left: 10px;">🖨️ Print QRs</button>
+        </div>
+    </div>
+
+    <div class="grid" id="qr-container"></div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        function generateQRs() {
+            let baseUrl = document.getElementById('baseUrl').value.trim();
+            if(!baseUrl) {
+                baseUrl = 'https://YOUR-SITE.netlify.app';
+            }
+            
+           
+            if (!/^https?:\/\//i.test(baseUrl)) {
+                baseUrl = 'https://' + baseUrl;
+            }
+
+            if(baseUrl.endsWith('/')) {
+                baseUrl = baseUrl.slice(0, -1);
+            }
+
+            const container = document.getElementById('qr-container');
+            container.innerHTML = ''; 
+
+            for(let i = 1; i <= 6; i++) {
+                const team = 'team' + i;
+             
+                const url = `${baseUrl}/?team=${team}`;
+                
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                const title = document.createElement('h2');
+                title.textContent = 'Mission: Team ' + i;
+                card.appendChild(title);
+
+                const qrDiv = document.createElement('div');
+                qrDiv.className = 'qr-wrapper';
+                
+                
+                new QRCode(qrDiv, {
+                    text: url,
+                    width: 250,
+                    height: 250,
+                    colorDark : "#0f172a",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                
+                card.appendChild(qrDiv);
+
+                const info = document.createElement('p');
+                info.textContent = `Put this in the envelope for Team ${i}.`;
+                info.style.fontWeight = 'bold';
+                info.style.color = '#ef4444';
+                card.appendChild(info);
+
+                const textUrl = document.createElement('p');
+                textUrl.className = 'url-text';
+                textUrl.textContent = url;
+                card.appendChild(textUrl);
+
+                container.appendChild(card);
+            }
+        }
+
+        window.onload = generateQRs;
+    </script>
+</body>
+</html>
